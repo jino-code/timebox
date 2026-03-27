@@ -21,6 +21,7 @@
 - PRテンプレートは`.github/PULL_REQUEST_TEMPLATE.md`で管理する。
 - 原則として小さく切り、1PRに対して1Issueを対応させる。
 - ただし、ドキュメント整備は例外として1PRに複数Issueをまとめる。
+- マージ戦略はSquash and mergeを採用する。mainブランチの履歴をPR単位で一本化し、詳細はPRを参照することで追跡できる。
 
 ## Milestone / Issue
 - Milestone: 大きな作業単位で作成する。タイトルは動詞で終わる形式で記載する。（例：「Cascadingアルゴリズムを実装する」）
