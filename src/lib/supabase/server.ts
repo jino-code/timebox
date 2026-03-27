@@ -1,0 +1,29 @@
+import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
+
+export async function createClient() {
+  const cookieStore = await cookies();
+
+  // サーバーサイド用クライアントを生成する。
+  return createServerClient(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_PUBLISHABLE_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll();
+        },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options),
+            );
+          } catch {
+            // Server Componentから呼ばれた場合はCookieの書き込みができない。
+            // Server Actionsからは正常に動作する。
+          }
+        },
+      },
+    },
+  );
+}

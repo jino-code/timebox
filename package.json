@@ -12,6 +12,8 @@
     "format:fix": "prettier 'src/**/*.{ts,tsx}' --write"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.9.0",
+    "@supabase/supabase-js": "^2.100.0",
     "next": "16.2.1",
     "react": "19.2.4",
     "react-dom": "19.2.4"
@@ -25,6 +27,7 @@
     "eslint-config-next": "16.2.1",
     "eslint-config-prettier": "^10.1.8",
     "prettier": "^3.8.1",
+    "supabase": "^2.84.4",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
