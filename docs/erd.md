@@ -1,40 +1,40 @@
 # ER図
 ```mermaid
 erDiagram
-    Users {
+    users {
         uuid id PK
-        timestamp created_at
-        timestamp updated_at
+        timestamptz created_at
+        timestamptz updated_at
     }
 
-    Schedules {
+    schedules {
         uuid id PK
         uuid user_id FK
         text title
         text memo
-        timestamp start_time
-        timestamp end_time
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        timestamptz start_time
+        timestamptz end_time
+        timestamptz created_at
+        timestamptz updated_at
+        timestamptz deleted_at
     }
 
-    Tasks {
+    tasks {
         uuid id PK
         uuid user_id FK
         text title
         text memo
-        timestamp start_time
-        timestamp end_time
+        timestamptz start_time
+        timestamptz end_time
         integer estimated_minutes
         text status
-        timestamp created_at
-        timestamp updated_at
-        timestamp deleted_at
+        timestamptz created_at
+        timestamptz updated_at
+        timestamptz deleted_at
     }
 
-    Users ||--o{ Schedules : "has"
-    Users ||--o{ Tasks : "has"
+    users ||--o{ schedules : "has"
+    users ||--o{ tasks : "has"
 ```
 
 ## 補足
@@ -43,6 +43,8 @@ erDiagram
 
 **Users**
 - id: PRIMARY KEY
+- created_at: NOT NULL
+- updated_at: NULL許容
 
 **Schedules**
 - id: PRIMARY KEY
@@ -51,6 +53,8 @@ erDiagram
 - start_time: NOT NULL
 - end_time: NOT NULL
 - memo: NULL許容
+- created_at: NOT NULL
+- updated_at: NULL許容
 - deleted_at: NULL許容
 
 **Tasks**
@@ -62,4 +66,6 @@ erDiagram
 - estimated_minutes: NOT NULL
 - status: NOT NULL、text（INBOX / SCHEDULED / COMPLETED）、デフォルト値はINBOX
 - memo: NULL許容
+- created_at: NOT NULL
+- updated_at: NULL許容
 - deleted_at: NULL許容
