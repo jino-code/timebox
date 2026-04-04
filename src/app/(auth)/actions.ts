@@ -3,11 +3,11 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 
-export type SignUpState = {
+export type AuthState = {
   error: string;
 };
 
-export async function signUp(prevState: SignUpState, formData: FormData) {
+export async function signUp(prevState: AuthState, formData: FormData) {
   const email = formData.get('email');
   const password = formData.get('password');
   const confirmPassword = formData.get('confirmPassword');
@@ -37,4 +37,27 @@ export async function signUp(prevState: SignUpState, formData: FormData) {
   }
 
   redirect('/');
+}
+
+export async function login(prevState: AuthState, formData: FormData) {
+  const email = formData.get('email');
+  const password = formData.get('password');
+
+  if (typeof email !== 'string' || typeof password !== 'string') {
+    return { error: '入力内容を確認してください。' };
+  }
+
+  if (!email || !password) {
+    return { error: '空欄の項目があります。' };
+  }
+
+  const supabase = await createClient();
+
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  redirect('/dashboard');
 }

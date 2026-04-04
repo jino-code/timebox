@@ -2,10 +2,10 @@
 
 import Link from 'next/link';
 import { useActionState } from 'react';
-import { signUp, AuthState } from '../actions';
+import { login, AuthState } from '../actions';
 
-function SignupForm() {
-  const [state, action] = useActionState<AuthState, FormData>(signUp, {
+function LoginForm() {
+  const [state, action] = useActionState<AuthState, FormData>(login, {
     error: '',
   });
 
@@ -30,23 +30,15 @@ function SignupForm() {
             />
           </div>
           <div>
-            <label className="block mb-1">パスワードの確認</label>
-            <input
-              type="password"
-              name="confirmPassword"
-              className="border rounded w-full p-2 mb-4 outline-none focus:ring-2 focus:ring-black"
-            />
-          </div>
-          <div>
             <button className="w-full py-2 bg-black text-white rounded hover:bg-zinc-700">
-              登録
+              ログイン
             </button>
             {state.error && <p>エラー: {state.error}</p>}
           </div>
         </form>
         <div className="mt-4 text-center">
-          <Link href="/login" className="text-blue-500 hover:underline">
-            ログインはこちら
+          <Link href="/signup" className="text-blue-500 hover:underline">
+            新規登録はこちら
           </Link>
         </div>
       </div>
@@ -54,4 +46,4 @@ function SignupForm() {
   );
 }
 
-export default SignupForm;
+export default LoginForm;
