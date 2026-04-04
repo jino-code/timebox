@@ -1,7 +1,7 @@
 # ER図
 ```mermaid
 erDiagram
-    users {
+    profiles {
         uuid id PK
         timestamptz created_at
         timestamptz updated_at
@@ -33,22 +33,22 @@ erDiagram
         timestamptz deleted_at
     }
 
-    users ||--o{ schedules : "has"
-    users ||--o{ tasks : "has"
+    profiles ||--o{ schedules : "has"
+    profiles ||--o{ tasks : "has"
 ```
 
 ## 補足
 
 ### 制約
 
-**Users**
+**profiles**
 - id: PRIMARY KEY
 - created_at: NOT NULL
 - updated_at: NULL許容
 
-**Schedules**
+**schedules**
 - id: PRIMARY KEY
-- user_id: FOREIGN KEY（Usersを参照、CASCADE DELETE）
+- user_id: FOREIGN KEY（profilesを参照、CASCADE DELETE）
 - title: NOT NULL
 - start_time: NOT NULL
 - end_time: NOT NULL
@@ -57,9 +57,9 @@ erDiagram
 - updated_at: NULL許容
 - deleted_at: NULL許容
 
-**Tasks**
+**tasks**
 - id: PRIMARY KEY
-- user_id: FOREIGN KEY（Usersを参照、CASCADE DELETE）
+- user_id: FOREIGN KEY（profilesを参照、CASCADE DELETE）
 - title: NOT NULL
 - start_time: NOT NULL
 - end_time: NOT NULL
