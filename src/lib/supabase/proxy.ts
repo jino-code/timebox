@@ -31,7 +31,15 @@ export async function updateSession(request: NextRequest) {
 
   // createServerClientとsupabase.auth.getClaims()の間にコードを書いてはいけない。
   // クライアントサイドとサーバーサイドで認証セッションが同期されず、意図しないログアウトが発生する恐れがある。
-  await supabase.auth.getClaims();
+  const { data } = await supabase.auth.getClaims();
+  const claims = data?.claims;
+
+  if (!claims) {
+    // 未認証なら、ログイン画面にリダイレクト
+    const url = request.nextUrl.clone();
+    url.pathname = '/login';
+    return NextResponse.redirect(url);
+  }
 
   return supabaseResponse;
 }
