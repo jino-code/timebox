@@ -61,8 +61,8 @@ erDiagram
 - id: PRIMARY KEY
 - user_id: FOREIGN KEY（profilesを参照、CASCADE DELETE）
 - title: NOT NULL
-- start_time: NOT NULL
-- end_time: NOT NULL
+- start_time: NULL許容
+- end_time: NULL許容
 - estimated_minutes: NOT NULL
 - status: NOT NULL、text（INBOX / SCHEDULED / COMPLETED）、デフォルト値はINBOX
 - memo: NULL許容
