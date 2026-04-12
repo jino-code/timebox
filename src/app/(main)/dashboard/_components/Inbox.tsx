@@ -1,4 +1,8 @@
+'use client';
+
 import { Task } from '@/types/task';
+import Modal from './Modal';
+import TaskCreateForm from './TaskCreateForm';
 
 type InboxProps = {
   tasks: Task[];
@@ -7,6 +11,18 @@ type InboxProps = {
 function Inbox({ tasks }: InboxProps) {
   return (
     <div className="flex flex-col h-full">
+      <div className="flex justify-start p-2">
+        <Modal
+          trigger={
+            <button className="px-4 py-2 bg-black text-white rounded hover:bg-zinc-700">
+              登録
+            </button>
+          }
+          title={'タスク登録'}
+        >
+          {(onSuccess) => <TaskCreateForm onSuccess={onSuccess} />}
+        </Modal>
+      </div>
       <div className="flex-1 overflow-y-auto">
         {tasks.map((task) => (
           <div
