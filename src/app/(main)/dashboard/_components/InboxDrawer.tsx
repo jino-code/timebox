@@ -21,7 +21,7 @@ function InboxDrawer({
           INBOX
         </div>
       </DrawerTrigger>
-      <DrawerContent className="min-h-[50vh]">
+      <DrawerContent className="h-[50vh]">
         <DrawerHeader>
           <DrawerTitle>INBOX</DrawerTitle>
           <DrawerDescription className="sr-only">
