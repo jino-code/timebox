@@ -3,11 +3,11 @@
 import { useActionState, useEffect } from 'react';
 import { createTask, TaskState } from '../actions';
 
-type TaskCreateFormProps = {
+type TaskFormProps = {
   onSuccess: () => void;
 };
 
-function TaskCreateForm({ onSuccess }: TaskCreateFormProps) {
+function TaskForm({ onSuccess }: TaskFormProps) {
   const [state, action] = useActionState<TaskState, FormData>(createTask, {
     error: '',
     success: false,
@@ -59,4 +59,4 @@ function TaskCreateForm({ onSuccess }: TaskCreateFormProps) {
   );
 }
 
-export default TaskCreateForm;
+export default TaskForm;
