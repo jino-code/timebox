@@ -2,7 +2,7 @@
 
 import { Task } from '@/types/task';
 import Modal from './Modal';
-import TaskCreateForm from './TaskCreateForm';
+import TaskForm from './TaskForm';
 
 type InboxProps = {
   tasks: Task[];
@@ -20,17 +20,22 @@ function Inbox({ tasks }: InboxProps) {
           }
           title={'タスク登録'}
         >
-          {(onSuccess) => <TaskCreateForm onSuccess={onSuccess} />}
+          {(onSuccess) => <TaskForm onSuccess={onSuccess} />}
         </Modal>
       </div>
       <div className="flex-1 overflow-y-auto">
         {tasks.map((task) => (
-          <div
+          <Modal
             key={task.id}
-            className="border rounded-lg p-4 mb-2 bg-white shadow-sm"
+            trigger={
+              <div className="border rounded-lg p-4 mb-2 bg-white shadow-sm">
+                <span>{task.title}</span>
+              </div>
+            }
+            title={'タスク詳細'}
           >
-            <span>{task.title}</span>
-          </div>
+            {(onSuccess) => <TaskForm task={task} onSuccess={onSuccess} />}
+          </Modal>
         ))}
       </div>
     </div>

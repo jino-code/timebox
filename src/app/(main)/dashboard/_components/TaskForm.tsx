@@ -1,23 +1,35 @@
 'use client';
 
 import { useActionState, useEffect } from 'react';
-import { createTask, TaskState } from '../actions';
+import { createTask, updateTask, deleteTask, TaskState } from '../actions';
+import { Task } from '@/types/task';
 
-type TaskCreateFormProps = {
+type TaskFormProps = {
+  task?: Task;
   onSuccess: () => void;
 };
 
-function TaskCreateForm({ onSuccess }: TaskCreateFormProps) {
-  const [state, action] = useActionState<TaskState, FormData>(createTask, {
+function TaskForm({ task, onSuccess }: TaskFormProps) {
+  const serverAction = task ? updateTask.bind(null, task.id) : createTask;
+  const [state, action] = useActionState<TaskState, FormData>(serverAction, {
     error: '',
     success: false,
   });
 
   useEffect(() => {
+    console.log('state.success', state.success);
     if (state.success) {
       onSuccess();
     }
   }, [state.success, onSuccess]);
+
+  const handleDelete = async () => {
+    if (!task) {
+      return;
+    }
+    await deleteTask(task.id);
+    onSuccess();
+  };
 
   return (
     <div className="flex items-center justify-center">
@@ -29,6 +41,7 @@ function TaskCreateForm({ onSuccess }: TaskCreateFormProps) {
               type="text"
               name="title"
               className="border rounded w-full p-2 mb-4 outline-none focus:ring-2 focus:ring-black"
+              defaultValue={task ? task.title : ''}
             />
           </div>
           <div>
@@ -37,6 +50,7 @@ function TaskCreateForm({ onSuccess }: TaskCreateFormProps) {
               type="number"
               name="estimated_minutes"
               className="border rounded w-full p-2 mb-4 outline-none focus:ring-2 focus:ring-black"
+              defaultValue={task ? task.estimated_minutes : ''}
             />
           </div>
           <div>
@@ -45,18 +59,29 @@ function TaskCreateForm({ onSuccess }: TaskCreateFormProps) {
               type="text"
               name="memo"
               className="border rounded w-full p-2 mb-4 outline-none focus:ring-2 focus:ring-black"
+              defaultValue={task ? (task.memo ?? '') : ''}
             />
           </div>
-          <div>
+          <div className="flex flex-col items-center gap-2 mt-2">
             <button className="px-4 py-2 bg-black text-white rounded hover:bg-zinc-700">
-              登録
+              保存
             </button>
-            {state.error && <p>エラー: {state.error}</p>}
+            {state.error && (
+              <p className="text-red-500 text-sm">{state.error}</p>
+            )}
           </div>
         </form>
+        {task && (
+          <button
+            className="mt-4 block mx-auto text-red-500 hover:text-red-600 text-sm"
+            onClick={handleDelete}
+          >
+            削除する
+          </button>
+        )}
       </div>
     </div>
   );
 }
 
-export default TaskCreateForm;
+export default TaskForm;

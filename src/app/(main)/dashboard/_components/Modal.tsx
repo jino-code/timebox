@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { useRouter } from 'next/navigation';
 
 type ModalProps = {
   trigger: React.ReactNode;
@@ -17,6 +18,7 @@ type ModalProps = {
 
 function Modal({ trigger, title, children }: ModalProps) {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -24,7 +26,10 @@ function Modal({ trigger, title, children }: ModalProps) {
       <DialogContent>
         <DialogTitle>{title}</DialogTitle>
         <DialogDescription className="sr-only">{title}</DialogDescription>
-        {children(() => setOpen(false))}
+        {children(() => {
+          setOpen(false);
+          router.refresh();
+        })}
       </DialogContent>
     </Dialog>
   );
