@@ -1,7 +1,7 @@
 'use client';
 
 import { useActionState, useEffect } from 'react';
-import { createTask, updateTask, TaskState } from '../actions';
+import { createTask, updateTask, deleteTask, TaskState } from '../actions';
 import { Task } from '@/types/task';
 
 type TaskFormProps = {
@@ -22,6 +22,14 @@ function TaskForm({ task, onSuccess }: TaskFormProps) {
       onSuccess();
     }
   }, [state.success, onSuccess]);
+
+  const handleDelete = async () => {
+    if (!task) {
+      return;
+    }
+    await deleteTask(task.id);
+    onSuccess();
+  };
 
   return (
     <div className="flex items-center justify-center">
@@ -54,13 +62,23 @@ function TaskForm({ task, onSuccess }: TaskFormProps) {
               defaultValue={task ? (task.memo ?? '') : ''}
             />
           </div>
-          <div>
+          <div className="flex flex-col items-center gap-2 mt-2">
             <button className="px-4 py-2 bg-black text-white rounded hover:bg-zinc-700">
               保存
             </button>
-            {state.error && <p>エラー: {state.error}</p>}
+            {state.error && (
+              <p className="text-red-500 text-sm">{state.error}</p>
+            )}
           </div>
         </form>
+        {task && (
+          <button
+            className="mt-4 block mx-auto text-red-500 hover:text-red-600 text-sm"
+            onClick={handleDelete}
+          >
+            削除する
+          </button>
+        )}
       </div>
     </div>
   );

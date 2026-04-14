@@ -47,3 +47,14 @@ export async function updateTaskById(
 
   return { error };
 }
+
+export async function deleteTaskById(supabase: SupabaseClient, taskId: string) {
+  const { error } = await supabase
+    .from('tasks')
+    .update({
+      deleted_at: new Date().toISOString(),
+    })
+    .eq('id', taskId);
+
+  return { error };
+}
