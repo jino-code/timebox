@@ -28,3 +28,22 @@ export async function insertTask(
 
   return { error };
 }
+
+export async function updateTaskById(
+  supabase: SupabaseClient,
+  taskId: string,
+  title: string,
+  estimatedMinutes: number,
+  memo: string,
+) {
+  const { error } = await supabase
+    .from('tasks')
+    .update({
+      title,
+      estimated_minutes: estimatedMinutes,
+      memo,
+    })
+    .eq('id', taskId);
+
+  return { error };
+}

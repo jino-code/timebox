@@ -1,19 +1,23 @@
 'use client';
 
 import { useActionState, useEffect } from 'react';
-import { createTask, TaskState } from '../actions';
+import { createTask, updateTask, TaskState } from '../actions';
+import { Task } from '@/types/task';
 
 type TaskFormProps = {
+  task?: Task;
   onSuccess: () => void;
 };
 
-function TaskForm({ onSuccess }: TaskFormProps) {
-  const [state, action] = useActionState<TaskState, FormData>(createTask, {
+function TaskForm({ task, onSuccess }: TaskFormProps) {
+  const serverAction = task ? updateTask.bind(null, task.id) : createTask;
+  const [state, action] = useActionState<TaskState, FormData>(serverAction, {
     error: '',
     success: false,
   });
 
   useEffect(() => {
+    console.log('state.success', state.success);
     if (state.success) {
       onSuccess();
     }
@@ -29,6 +33,7 @@ function TaskForm({ onSuccess }: TaskFormProps) {
               type="text"
               name="title"
               className="border rounded w-full p-2 mb-4 outline-none focus:ring-2 focus:ring-black"
+              defaultValue={task ? task.title : ''}
             />
           </div>
           <div>
@@ -37,6 +42,7 @@ function TaskForm({ onSuccess }: TaskFormProps) {
               type="number"
               name="estimated_minutes"
               className="border rounded w-full p-2 mb-4 outline-none focus:ring-2 focus:ring-black"
+              defaultValue={task ? task.estimated_minutes : ''}
             />
           </div>
           <div>
@@ -45,11 +51,12 @@ function TaskForm({ onSuccess }: TaskFormProps) {
               type="text"
               name="memo"
               className="border rounded w-full p-2 mb-4 outline-none focus:ring-2 focus:ring-black"
+              defaultValue={task ? (task.memo ?? '') : ''}
             />
           </div>
           <div>
             <button className="px-4 py-2 bg-black text-white rounded hover:bg-zinc-700">
-              登録
+              保存
             </button>
             {state.error && <p>エラー: {state.error}</p>}
           </div>
