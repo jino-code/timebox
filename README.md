@@ -1,5 +1,12 @@
 # Timebox
 
+## デモ
+
+URL: https://timebox-blond.vercel.app/
+テストアカウント
+- メールアドレス: timebox.guest@example.com
+- パスワード: timeboxguest
+
 ## 概要
 
 予定とタスクをタイムライン上で一元管理して、1日のキャパシティを可視化するタスク管理アプリ。
