@@ -1,4 +1,5 @@
 import { SupabaseClient } from '@supabase/supabase-js';
+
 import { Task } from '@/types/task';
 
 export async function getInboxTasks(supabase: SupabaseClient) {

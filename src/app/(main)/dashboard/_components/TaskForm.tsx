@@ -1,8 +1,10 @@
 'use client';
 
 import { useActionState, useEffect } from 'react';
-import { createTask, updateTask, deleteTask, TaskState } from '../actions';
+
 import { Task } from '@/types/task';
+
+import { createTask, updateTask, deleteTask, TaskState } from '../actions';
 
 type TaskFormProps = {
   task?: Task;
@@ -17,7 +19,6 @@ function TaskForm({ task, onSuccess }: TaskFormProps) {
   });
 
   useEffect(() => {
-    console.log('state.success', state.success);
     if (state.success) {
       onSuccess();
     }

@@ -1,6 +1,7 @@
 'use client';
 
 import { Task } from '@/types/task';
+
 import Modal from './Modal';
 import TaskForm from './TaskForm';
 
