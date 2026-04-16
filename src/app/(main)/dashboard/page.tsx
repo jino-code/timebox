@@ -1,7 +1,8 @@
 import { createClient } from '@/lib/supabase/server';
+import { getInboxTasks } from '@/repositories/tasks';
+
 import Inbox from './_components/Inbox';
 import InboxDrawer from './_components/InboxDrawer';
-import { getInboxTasks } from '@/repositories/tasks';
 
 async function Dashboard() {
   const supabase = await createClient();

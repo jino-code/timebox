@@ -1,4 +1,5 @@
 import Link from 'next/link';
+
 import { logout } from '../(auth)/actions';
 
 function mainLayout({
