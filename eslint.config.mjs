@@ -28,6 +28,10 @@ const eslintConfig = defineConfig([
           "newlines-between": "always",
         },
       ],
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { "varsIgnorePattern": "^_", "argsIgnorePattern": "^_" }
+      ],
     },
   },
   // Override default ignores of eslint-config-next.
