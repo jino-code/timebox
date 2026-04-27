@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { getInboxTasks, getDailyTasks } from '@/repositories/tasks';
 import { getDailySchedules } from '@/repositories/schedules';
+import { buildDailyTimeline } from '@/utils/timeline';
 
 import Inbox from './_components/Inbox';
 import DashboardTabs from './_components/DashboardTabs';
@@ -27,6 +28,12 @@ async function Dashboard({ searchParams }: DashboardProps) {
     targetDate,
   );
 
+  const timeline = buildDailyTimeline(
+    targetDate,
+    schedules ?? [],
+    scheduledTasks ?? [],
+  );
+
   return (
     <DashboardTabs
       tabs={[
@@ -36,11 +43,7 @@ async function Dashboard({ searchParams }: DashboardProps) {
             scheduledTasksError || schedulesError ? (
               <div>スケジュールの取得に失敗しました。再度お試しください。</div>
             ) : (
-              <Timeline
-                schedules={schedules ?? []}
-                tasks={scheduledTasks ?? []}
-                date={targetDate}
-              />
+              <Timeline date={targetDate} timeline={timeline} />
             ),
         },
         {
