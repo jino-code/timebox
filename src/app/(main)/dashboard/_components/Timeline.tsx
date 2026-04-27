@@ -1,39 +1,45 @@
 'use client';
 
-import { Task } from '@/types/task';
-import { Schedule } from '@/types/schedule';
+import { format } from 'date-fns';
+import { toZonedTime } from 'date-fns-tz';
+
+import { TimelineItem } from '@/types/timeline';
+
 import DateNavigation from './DateNavigation';
 
 type TimelineProps = {
-  schedules: Schedule[],
-  tasks: Task[],
-  date: string,
+  date: string;
+  timeline: TimelineItem[];
 };
 
-function Timeline({ schedules, tasks, date }: TimelineProps) {
+function Timeline({ date, timeline }: TimelineProps) {
   return (
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-y-auto">
-        <DateNavigation date={date}/>
-        {schedules.map((schedule) => (
+        <DateNavigation date={date} />
+        {timeline.map((item) => (
           <div
-            key={schedule.id}
+            key={item.id}
             className="border rounded-lg p-4 mb-2 bg-white shadow-sm"
           >
-            <span>{schedule.title}</span>
-          </div>
-        ))}
-        {tasks.map((task) => (
-          <div
-            key={task.id}
-            className="border rounded-lg p-4 mb-2 bg-white shadow-sm"
-          >
-            <span>{task.title}</span>
+            <div className="flex items-center gap-4">
+              <span className="w-24 shrink-0 text-sm text-gray-500">
+                {item.type === 'gap' && item.isFullDay
+                  ? '終日'
+                  : `${formatTime(item.start_time)}〜${formatTime(item.end_time)}`}
+              </span>
+              <span>{item.type === 'gap' ? '空き時間' : item.title}</span>
+            </div>
           </div>
         ))}
       </div>
     </div>
   );
 }
+
+const formatTime = (isoString: string) => {
+  const zonedDate = toZonedTime(isoString, 'Asia/Tokyo');
+  return format(zonedDate, 'HH:mm');
+};
 
 export default Timeline;
