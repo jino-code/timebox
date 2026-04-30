@@ -3,6 +3,7 @@
 ## デモ
 
 URL: https://timebox-blond.vercel.app/
+
 テストアカウント
 - メールアドレス: timebox.guest@example.com
 - パスワード: timeboxguest
@@ -22,8 +23,7 @@ URL: https://timebox-blond.vercel.app/
 - 日次ビュー
 - 週次ビュー
 - インボックス
-- 2タップ移動UI
-- キャパシティ超過アラート
+- タスク移動(配置ボタン+固定バー方式)
 - 認証（Supabase Auth）
 
 ## 技術スタック
