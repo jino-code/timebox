@@ -22,3 +22,22 @@ export async function getDailySchedules(
 
   return { data, error };
 }
+
+export async function insertSchedule(
+  supabase: SupabaseClient,
+  userId: string,
+  title: string,
+  startTime: string,
+  endTime: string,
+  memo: string,
+) {
+  const { error } = await supabase.from('schedules').insert({
+    user_id: userId,
+    title,
+    start_time: startTime,
+    end_time: endTime,
+    memo,
+  });
+
+  return { error };
+}
