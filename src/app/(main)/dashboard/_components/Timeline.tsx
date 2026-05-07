@@ -7,6 +7,7 @@ import { TimelineItem } from '@/types/timeline';
 
 import Modal from './Modal';
 import ScheduleForm from './ScheduleForm';
+import TaskForm from './TaskForm';
 import DateNavigation from './DateNavigation';
 
 type TimelineProps = {
@@ -83,12 +84,21 @@ function Timeline({ date, timeline }: TimelineProps) {
                 key={item.id}
                 className="border rounded-lg p-4 mb-2 bg-white shadow-sm"
               >
-                <div className="flex items-center gap-4">
-                  <span className="w-24 shrink-0 text-sm text-gray-500">
-                    {`${formatTime(item.start_time)}〜${formatTime(item.end_time)}`}
-                  </span>
-                  <span>{item.title}</span>
-                </div>
+                <Modal
+                  trigger={
+                    <div className="flex items-center gap-4">
+                      <span className="w-24 shrink-0 text-sm text-gray-500">
+                        {`${formatTime(item.start_time)}〜${formatTime(item.end_time)}`}
+                      </span>
+                      <span>{item.title}</span>
+                    </div>
+                  }
+                  title={'タスク詳細'}
+                >
+                  {(onSuccess) => (
+                    <TaskForm task={item.task} onSuccess={onSuccess} />
+                  )}
+                </Modal>
               </div>
             );
           }
