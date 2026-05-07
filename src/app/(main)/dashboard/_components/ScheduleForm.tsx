@@ -5,7 +5,13 @@ import { format } from 'date-fns';
 import { toZonedTime } from 'date-fns-tz';
 
 import { Schedule } from '@/types/schedule';
-import { createSchedule, updateSchedule, ScheduleState } from '../actions';
+
+import {
+  createSchedule,
+  updateSchedule,
+  deleteSchedule,
+  ScheduleState,
+} from '../actions';
 
 type ScheduleFormProps = {
   schedule?: Schedule;
@@ -55,6 +61,14 @@ function ScheduleForm({
       return toDatetimeLocal(gapEndTime);
     }
     return '';
+  };
+
+  const handleDelete = async () => {
+    if (!schedule) {
+      return;
+    }
+    await deleteSchedule(schedule.id);
+    onSuccess();
   };
 
   return (
@@ -112,6 +126,14 @@ function ScheduleForm({
             )}
           </div>
         </form>
+        {schedule && (
+          <button
+            className="mt-4 block mx-auto text-red-500 hover:text-red-600 text-sm"
+            onClick={handleDelete}
+          >
+            削除する
+          </button>
+        )}
       </div>
     </div>
   );

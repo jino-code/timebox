@@ -62,3 +62,17 @@ export async function updateScheduleById(
 
   return { error };
 }
+
+export async function deleteScheduleById(
+  supabase: SupabaseClient,
+  scheduleId: string,
+) {
+  const { error } = await supabase
+    .from('schedules')
+    .update({
+      deleted_at: new Date().toISOString(),
+    })
+    .eq('id', scheduleId);
+
+  return { error };
+}

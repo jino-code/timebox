@@ -9,7 +9,11 @@ import {
   updateTaskById,
   deleteTaskById,
 } from '@/repositories/tasks';
-import { insertSchedule, updateScheduleById } from '@/repositories/schedules';
+import {
+  insertSchedule,
+  updateScheduleById,
+  deleteScheduleById,
+} from '@/repositories/schedules';
 
 export type TaskState = {
   error: string;
@@ -259,6 +263,30 @@ export async function updateSchedule(
     jstStartTime,
     jstEndTime,
     memo,
+  );
+
+  if (schedulesError) {
+    return { error: schedulesError.message, success: false };
+  } else {
+    revalidatePath('/dashboard');
+    return { error: '', success: true };
+  }
+}
+
+export async function deleteSchedule(scheduleId: string) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: '認証エラーが発生しました。', success: false };
+  }
+
+  const { error: schedulesError } = await deleteScheduleById(
+    supabase,
+    scheduleId,
   );
 
   if (schedulesError) {
