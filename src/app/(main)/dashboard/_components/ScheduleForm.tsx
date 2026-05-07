@@ -4,21 +4,27 @@ import { useActionState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { toZonedTime } from 'date-fns-tz';
 
-import { createSchedule, ScheduleState } from '../actions';
+import { Schedule } from '@/types/schedule';
+import { createSchedule, updateSchedule, ScheduleState } from '../actions';
 
 type ScheduleFormProps = {
-  gapStartTime: string;
-  gapEndTime: string;
+  schedule?: Schedule;
+  gapStartTime?: string;
+  gapEndTime?: string;
   onSuccess: () => void;
 };
 
 function ScheduleForm({
+  schedule,
   gapStartTime,
   gapEndTime,
   onSuccess,
 }: ScheduleFormProps) {
+  const serverAction = schedule
+    ? updateSchedule.bind(null, schedule.id)
+    : createSchedule;
   const [state, action] = useActionState<ScheduleState, FormData>(
-    createSchedule,
+    serverAction,
     {
       error: '',
       success: false,
@@ -31,6 +37,26 @@ function ScheduleForm({
     }
   }, [state.success, onSuccess]);
 
+  const getDefaultStartTime = () => {
+    if (schedule) {
+      return toDatetimeLocal(schedule.start_time);
+    }
+    if (gapStartTime) {
+      return toDatetimeLocal(gapStartTime);
+    }
+    return '';
+  };
+
+  const getDefaultEndTime = () => {
+    if (schedule) {
+      return toDatetimeLocal(schedule.end_time);
+    }
+    if (gapEndTime) {
+      return toDatetimeLocal(gapEndTime);
+    }
+    return '';
+  };
+
   return (
     <div className="flex items-center justify-center">
       <div className="bg-white shadow-md rounded-lg p-8 w-80">
@@ -41,6 +67,7 @@ function ScheduleForm({
               type="text"
               name="title"
               className="border rounded w-full p-2 mb-4 outline-none focus:ring-2 focus:ring-black"
+              defaultValue={schedule ? schedule.title : ''}
             />
           </div>
           <div>
@@ -49,10 +76,10 @@ function ScheduleForm({
               type="datetime-local"
               name="start_time"
               className="border rounded w-full p-2 mb-4 outline-none focus:ring-2 focus:ring-black"
-              min={toDatetimeLocal(gapStartTime)}
-              max={toDatetimeLocal(gapEndTime)}
+              min={gapStartTime ? toDatetimeLocal(gapStartTime) : undefined}
+              max={gapEndTime ? toDatetimeLocal(gapEndTime) : undefined}
               step={300}
-              defaultValue={toDatetimeLocal(gapStartTime)}
+              defaultValue={getDefaultStartTime()}
             />
           </div>
           <div>
@@ -61,10 +88,10 @@ function ScheduleForm({
               type="datetime-local"
               name="end_time"
               className="border rounded w-full p-2 mb-4 outline-none focus:ring-2 focus:ring-black"
-              min={toDatetimeLocal(gapStartTime)}
-              max={toDatetimeLocal(gapEndTime)}
+              min={gapStartTime ? toDatetimeLocal(gapStartTime) : undefined}
+              max={gapEndTime ? toDatetimeLocal(gapEndTime) : undefined}
               step={300}
-              defaultValue={toDatetimeLocal(gapEndTime)}
+              defaultValue={getDefaultEndTime()}
             />
           </div>
           <div>
@@ -73,6 +100,7 @@ function ScheduleForm({
               type="text"
               name="memo"
               className="border rounded w-full p-2 mb-4 outline-none focus:ring-2 focus:ring-black"
+              defaultValue={schedule ? (schedule.memo ?? '') : ''}
             />
           </div>
           <div className="flex flex-col items-center gap-2 mt-2">

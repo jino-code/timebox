@@ -9,7 +9,7 @@ import {
   updateTaskById,
   deleteTaskById,
 } from '@/repositories/tasks';
-import { insertSchedule } from '@/repositories/schedules';
+import { insertSchedule, updateScheduleById } from '@/repositories/schedules';
 
 export type TaskState = {
   error: string;
@@ -195,6 +195,66 @@ export async function createSchedule(
   const { error: schedulesError } = await insertSchedule(
     supabase,
     user.id,
+    title,
+    jstStartTime,
+    jstEndTime,
+    memo,
+  );
+
+  if (schedulesError) {
+    return { error: schedulesError.message, success: false };
+  } else {
+    revalidatePath('/dashboard');
+    return { error: '', success: true };
+  }
+}
+
+export async function updateSchedule(
+  scheduleId: string,
+  prevState: ScheduleState,
+  formData: FormData,
+) {
+  const title = formData.get('title');
+  const startTime = formData.get('start_time');
+  const endTime = formData.get('end_time');
+  const memo = formData.get('memo');
+
+  if (
+    typeof title !== 'string' ||
+    typeof startTime !== 'string' ||
+    typeof endTime !== 'string' ||
+    typeof memo !== 'string'
+  ) {
+    return { error: '入力内容を確認してください。', success: false };
+  }
+
+  if (!title || !startTime || !endTime) {
+    return { error: '空欄の項目があります。', success: false };
+  }
+
+  if (!isBefore(new Date(startTime), new Date(endTime))) {
+    return {
+      error: '終了時間は開始時間より後に設定してください。',
+      success: false,
+    };
+  }
+
+  const jstStartTime = `${startTime}+09:00`;
+  const jstEndTime = `${endTime}+09:00`;
+
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: '認証エラーが発生しました。', success: false };
+  }
+
+  const { error: schedulesError } = await updateScheduleById(
+    supabase,
+    scheduleId,
     title,
     jstStartTime,
     jstEndTime,

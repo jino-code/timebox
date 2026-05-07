@@ -41,3 +41,24 @@ export async function insertSchedule(
 
   return { error };
 }
+
+export async function updateScheduleById(
+  supabase: SupabaseClient,
+  scheduleId: string,
+  title: string,
+  jstStartTime: string,
+  jstEndTime: string,
+  memo: string,
+) {
+  const { error } = await supabase
+    .from('schedules')
+    .update({
+      title,
+      start_time: jstStartTime,
+      end_time: jstEndTime,
+      memo,
+    })
+    .eq('id', scheduleId);
+
+  return { error };
+}
