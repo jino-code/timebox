@@ -21,7 +21,6 @@ URL: https://timebox-blond.vercel.app/
 ## MVP
 
 - 日次ビュー
-- 週次ビュー
 - インボックス
 - タスク移動(配置ボタン+固定バー方式)
 - 認証（Supabase Auth）
