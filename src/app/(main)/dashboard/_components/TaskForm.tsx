@@ -1,6 +1,8 @@
 'use client';
 
 import { useActionState, useEffect } from 'react';
+import { format } from 'date-fns';
+import { toZonedTime } from 'date-fns-tz';
 
 import { Task } from '@/types/task';
 
@@ -54,6 +56,34 @@ function TaskForm({ task, onSuccess }: TaskFormProps) {
               defaultValue={task ? task.estimated_minutes : ''}
             />
           </div>
+          {task && (
+            <>
+              <div>
+                <label className="block mb-1">開始時間</label>
+                <input
+                  type="datetime-local"
+                  name="start_time"
+                  className="border rounded w-full p-2 mb-4 outline-none focus:ring-2 focus:ring-black"
+                  step={300}
+                  defaultValue={
+                    task.start_time ? toDatetimeLocal(task.start_time) : ''
+                  }
+                />
+              </div>
+              <div>
+                <label className="block mb-1">終了時間</label>
+                <input
+                  type="datetime-local"
+                  name="end_time"
+                  className="border rounded w-full p-2 mb-4 outline-none focus:ring-2 focus:ring-black"
+                  step={300}
+                  defaultValue={
+                    task.end_time ? toDatetimeLocal(task.end_time) : ''
+                  }
+                />
+              </div>
+            </>
+          )}
           <div>
             <label className="block mb-1">メモ</label>
             <input
@@ -83,6 +113,11 @@ function TaskForm({ task, onSuccess }: TaskFormProps) {
       </div>
     </div>
   );
+}
+
+function toDatetimeLocal(isoString: string) {
+  const zonedDate = toZonedTime(isoString, 'Asia/Tokyo');
+  return format(zonedDate, "yyyy-MM-dd'T'HH:mm");
 }
 
 export default TaskForm;

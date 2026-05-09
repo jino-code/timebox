@@ -54,6 +54,9 @@ export async function updateTaskById(
   taskId: string,
   title: string,
   estimatedMinutes: number,
+  jstStartTime: string | null,
+  jstEndTime: string | null,
+  status: string,
   memo: string,
 ) {
   const { error } = await supabase
@@ -61,6 +64,9 @@ export async function updateTaskById(
     .update({
       title,
       estimated_minutes: estimatedMinutes,
+      start_time: jstStartTime,
+      end_time: jstEndTime,
+      status,
       memo,
     })
     .eq('id', taskId);

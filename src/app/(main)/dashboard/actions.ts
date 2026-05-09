@@ -84,11 +84,15 @@ export async function updateTask(
 ) {
   const title = formData.get('title');
   const estimatedMinutesStr = formData.get('estimated_minutes');
+  const startTime = formData.get('start_time') ?? '';
+  const endTime = formData.get('end_time') ?? '';
   const memo = formData.get('memo');
 
   if (
     typeof title !== 'string' ||
     typeof estimatedMinutesStr !== 'string' ||
+    typeof startTime !== 'string' ||
+    typeof endTime !== 'string' ||
     typeof memo !== 'string'
   ) {
     return { error: '入力内容を確認してください。', success: false };
@@ -103,6 +107,31 @@ export async function updateTask(
   if (isNaN(estimatedMinutes) || estimatedMinutes <= 0) {
     return {
       error: '見込み時間は1以上の数値を入力してください。',
+      success: false,
+    };
+  }
+
+  let jstStartTime: string | null = null;
+  let jstEndTime: string | null = null;
+  let status = '';
+  if (startTime === '' && endTime === '') {
+    status = 'INBOX';
+  } else if (startTime !== '' && endTime !== '') {
+    if (!isBefore(new Date(startTime), new Date(endTime))) {
+      return {
+        error: '終了時間は開始時間より後に設定してください。',
+        success: false,
+      };
+    }
+
+    jstStartTime = `${startTime}+09:00`;
+    jstEndTime = `${endTime}+09:00`;
+
+    status = 'SCHEDULED';
+  } else {
+    return {
+      error:
+        '開始時間と終了時間はどちらも入力するか、どちらも空にするかにしてください。',
       success: false,
     };
   }
@@ -122,6 +151,9 @@ export async function updateTask(
     taskId,
     title,
     estimatedMinutes,
+    jstStartTime,
+    jstEndTime,
+    status,
     memo,
   );
 
