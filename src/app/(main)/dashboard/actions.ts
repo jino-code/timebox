@@ -8,6 +8,7 @@ import {
   insertTask,
   updateTaskById,
   deleteTaskById,
+  moveTaskToInboxById,
 } from '@/repositories/tasks';
 import {
   insertSchedule,
@@ -184,6 +185,22 @@ export async function deleteTask(taskId: string) {
     revalidatePath('/dashboard');
     return { error: '', success: true };
   }
+}
+
+export async function moveTaskToInbox(taskId: string) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: '認証エラーが発生しました。', success: false };
+  }
+
+  await moveTaskToInboxById(supabase, taskId);
+
+  revalidatePath('/dashboard');
 }
 
 export async function createSchedule(

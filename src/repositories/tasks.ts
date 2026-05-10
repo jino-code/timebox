@@ -84,3 +84,17 @@ export async function deleteTaskById(supabase: SupabaseClient, taskId: string) {
 
   return { error };
 }
+
+export async function moveTaskToInboxById(
+  supabase: SupabaseClient,
+  taskId: string,
+) {
+  await supabase
+    .from('tasks')
+    .update({
+      start_time: null,
+      end_time: null,
+      status: 'INBOX',
+    })
+    .eq('id', taskId);
+}

@@ -5,6 +5,8 @@ import { toZonedTime } from 'date-fns-tz';
 
 import { TimelineItem } from '@/types/timeline';
 
+import { moveTaskToInbox } from '../actions';
+
 import Modal from './Modal';
 import ScheduleForm from './ScheduleForm';
 import TaskForm from './TaskForm';
@@ -91,6 +93,15 @@ function Timeline({ date, timeline }: TimelineProps) {
                         {`${formatTime(item.start_time)}〜${formatTime(item.end_time)}`}
                       </span>
                       <span>{item.title}</span>
+                      <button
+                        className="ml-auto text-xs text-white bg-gray-400 hover:bg-gray-500 rounded px-2 py-1 shrink-0"
+                        onClick={async (e) => {
+                          e.stopPropagation();
+                          await moveTaskToInbox(item.task.id);
+                        }}
+                      >
+                        インボックスに戻す
+                      </button>
                     </div>
                   }
                   title={'タスク詳細'}
