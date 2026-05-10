@@ -22,7 +22,7 @@ URL: https://timebox-blond.vercel.app/
 
 - 日次ビュー
 - インボックス
-- タスク移動(配置ボタン+固定バー方式)
+- タスク移動(編集機能による移動方式)
 - 認証（Supabase Auth）
 
 ## 技術スタック
