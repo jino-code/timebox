@@ -1,4 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
+import { format } from 'date-fns';
+import { toZonedTime } from 'date-fns-tz';
 import { getInboxTasks, getDailyTasks } from '@/repositories/tasks';
 import { getDailySchedules } from '@/repositories/schedules';
 import { buildDailyTimeline } from '@/utils/timeline';
@@ -17,7 +19,8 @@ async function Dashboard({ searchParams }: DashboardProps) {
   const { date } = await searchParams;
 
   // dateパラメータが未指定の場合は今日日付をデフォルトにする。
-  const targetDate = date ?? new Date().toISOString().split('T')[0];
+  const today = format(toZonedTime(new Date(), 'Asia/Tokyo'), 'yyyy-MM-dd');
+  const targetDate = date ?? today;
 
   const { data: inboxTasks, error: inboxTasksError } =
     await getInboxTasks(supabase);
